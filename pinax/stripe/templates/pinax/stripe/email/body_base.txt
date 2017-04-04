@@ -11,13 +11,13 @@ CUSTOMER: {% block customer_name %}{{ charge.customer.user }}{% endblock %}
 
 DETAILS
 -------
-{{ charge.customer.current_subscription.plan_display }} - ${{ charge.amount|floatformat:2 }}
+{{ charge.description }} - ${{ charge.amount|floatformat:2 }} {{charge.currency|upper}}
 
-TOTAL: ${{ charge.amount|floatformat:2 }} USD
-PAID BY CREDIT CARD: -${{ charge.amount|floatformat:2 }}
+TOTAL: ${{ charge.amount|floatformat:2 }} {{charge.currency|upper}}
+PAID BY CREDIT CARD: ${{ charge.amount|floatformat:2 }}
 ========================================================
-{% else %}{% if charge.refunded %}Your credit card ending in {{ charge.card_last_4 }} was refunded ${{ charge.amount|floatformat:2 }}.
-{% else %}We are sorry, but we failed to charge your credit card ending in {{ charge.card_last_4 }} for the amount ${{ charge.amount|floatformat:2 }}.
+{% else %}{% if charge.refunded %}Your credit card ending in {{ charge.card_last_4 }} was refunded ${{ charge.amount|floatformat:2 }} {{charge.currency|upper}}.
+{% else %}We are sorry, but we failed to charge your credit card ending in {{ charge.card_last_4 }} for the amount ${{ charge.amount|floatformat:2 }} {{charge.currency|upper}}.
 {% endif %}{% endif %}
 
 Please contact us with any questions regarding this invoice.

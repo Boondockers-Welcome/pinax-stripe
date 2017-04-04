@@ -301,3 +301,10 @@ class Charge(StripeObject):
     @property
     def stripe_charge(self):
         return stripe.Charge.retrieve(self.stripe_id)
+
+    @property
+    def card_last_4(self):
+        card = Card.objects.filter(stripe_id=self.source).first()
+        if card:
+            return card.last4
+        return ''
