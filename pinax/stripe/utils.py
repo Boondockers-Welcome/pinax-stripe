@@ -39,7 +39,7 @@ def convert_amount_for_db(amount, currency="usd"):
 def convert_amount_for_api(amount, currency="usd"):
     if currency is None:
         currency = "usd"
-    return int(amount * 100) if currency.lower() not in ZERO_DECIMAL_CURRENCIES else int(amount)
+    return round(amount * 100) if currency.lower() not in ZERO_DECIMAL_CURRENCIES else round(amount)
 
 
 def update_with_defaults(obj, defaults, created):
