@@ -82,7 +82,13 @@ def create(
     )
     charge = sync_charge_from_stripe_data(stripe_charge)
     if send_receipt:
-        hooks.hookset.send_receipt(charge, email)
+        try:
+            hooks.hookset.send_receipt(charge, email)
+        except Exception:
+            # No way to pass error message back without changing interface, just fail
+            # silently. They can check the "receipt_sent" attr to see if it failed
+            pass
+    charge.refresh_from_db()
     return charge
 
 
