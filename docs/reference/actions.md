@@ -58,7 +58,7 @@ Returns: `pinax.stripe.models.Charge` object
 
 ## Customers
 
-#### pinax.stripe.actions.customer.can_charge
+#### pinax.stripe.actions.customers.can_charge
 
 Can the given customer create a charge
 
@@ -66,7 +66,7 @@ Args:
 
 - customer: a `pinax.stripe.models.Customer` object
 
-#### pinax.stripe.actions.customer.create
+#### pinax.stripe.actions.customers.create
 
 Creates a Stripe customer
 
@@ -78,10 +78,11 @@ Args:
     `settings.PINAX_STRIPE_DEFAULT_PLAN`.
 - charge_immediately: whether or not the user should be immediately
     charged for the subscription. Defaults to `True`.
+- quantity: the quantity of the subscription. Defaults to `1`.
 
 Returns: `pinax.stripe.models.Customer` object that was created
 
-#### pinax.stripe.actions.customer.get_customer_for_user
+#### pinax.stripe.actions.customers.get_customer_for_user
 
 Get a customer object for a given user
 
@@ -89,9 +90,9 @@ Args:
 
 - user: a `user` object
 
-Returns: `pinax.stripe.models.Customer` object
+Returns: `pinax.stripe.models.Customer` object or `None` if it doesn't exist
 
-#### pinax.stripe.actions.customer.purge
+#### pinax.stripe.actions.customers.purge
 
 Deletes the Stripe customer data and purges the linking of the transaction
 data to the Django user.
@@ -100,7 +101,7 @@ Args:
 
 - customer: the `pinax.stripe.models.Customer` object to purge.
 
-#### pinax.stripe.actions.customer.link_customer
+#### pinax.stripe.actions.customers.link_customer
 
 Links a customer referenced in a webhook event message to the event object
 
@@ -108,7 +109,7 @@ Args:
 
 - event: the `pinax.stripe.models.Event` object to link
 
-#### pinax.stripe.actions.customer.set_default_source
+#### pinax.stripe.actions.customers.set_default_source
 
 Sets the default payment source for a customer
 
@@ -117,9 +118,9 @@ Args:
 - customer: a `pinax.stripe.models.Customer` object
 - source: the Stripe ID of the payment source
 
-#### pinax.stripe.actions.customer.sync_customer
+#### pinax.stripe.actions.customers.sync_customer
 
-Syncronizes a local Customer object with details from the Stripe API
+Synchronizes a local Customer object with details from the Stripe API
 
 Args:
 
@@ -200,7 +201,7 @@ Returns: `True` if the invoice was paid, `False` if it was unable to be paid.
 
 #### pinax.stripe.actions.invoices.sync_invoice_from_stripe_data
 
-Syncronizes a local invoice with data from the Stripe API
+Synchronizes a local invoice with data from the Stripe API
 
 Args:
     
@@ -212,33 +213,33 @@ Returns: the `pinax.stripe.models.Invoice` that was created or updated
 
 #### pinax.stripe.actions.invoices.sync_invoices_for_customer
 
-Syncronizes all invoices for a customer
+Synchronizes all invoices for a customer
 
 Args:
 
-- customer: the `pinax.stripe.models.Customer` for whom to syncronize all invoices
+- customer: the `pinax.stripe.models.Customer` for whom to synchronize all invoices
 
 #### pinax.stripe.actions.invoices.sync_invoice_items
 
-Syncronizes all invoice line items for a particular invoice
+Synchronizes all invoice line items for a particular invoice
 
 This assumes line items from a Stripe invoice.lines property and not through
 the invoicesitems resource calls. At least according to the documentation
 the data for an invoice item is slightly different between the two calls.
 
-For example, going through the invoiceitems resource you don't get a "type"
+For example, going through the invoiceitems resource you do not get a "type"
 field on the object.
 
 Args:
 
-- invoice: the `pinax.stripe.models.Invoice` object to syncronize
+- invoice: the `pinax.stripe.models.Invoice` object to synchronize
 - items: the data from the Stripe API representing the line items
 
 ## Plans
 
 #### pinax.stripe.actions.plans.sync_plans
 
-Syncronizes all plans from the Stripe API
+Synchronizes all plans from the Stripe API
 
 ## Refunds
 
@@ -282,7 +283,7 @@ Args:
 
 #### pinax.stripe.actions.sources.sync_card
 
-Syncronizes the data for a card locally for a given customer
+Synchronizes the data for a card locally for a given customer
 
 Args:
 
@@ -291,7 +292,7 @@ Args:
 
 #### pinax.stripe.actions.sources.sync_bitcoin
 
-Syncronizes the data for a Bitcoin receiver locally for a given customer
+Synchronizes the data for a Bitcoin receiver locally for a given customer
 
 Args:
 
@@ -301,7 +302,7 @@ Args:
 
 #### pinax.stripe.actions.sources.sync_payment_source_from_stripe_data
 
-Syncronizes the data for a payment source locally for a given customer
+Synchronizes the data for a payment source locally for a given customer
 
 Args:
 
@@ -411,7 +412,7 @@ Returns: the data for a subscription object from the Stripe API
 
 #### pinax.stripe.actions.subscriptions.sync_subscription_from_stripe_data
 
-Syncronizes data from the Stripe API for a subscription
+Synchronizes data from the Stripe API for a subscription
 
 Args:
 
@@ -450,7 +451,7 @@ Args:
 
 #### pinax.stripe.actions.transfers.sync_transfer
 
-Syncronizes a transfer from the Stripe API
+Synchronizes a transfer from the Stripe API
 
 Args:
 

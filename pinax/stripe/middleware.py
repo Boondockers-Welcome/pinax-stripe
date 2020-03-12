@@ -1,16 +1,21 @@
 import django
 from django.shortcuts import redirect
 
+from .actions import customers, subscriptions
+from .conf import settings
+
 try:
     from django.urls import resolve
 except ImportError:
     from django.core.urlresolvers import resolve
 
-from .actions import customers, subscriptions
-from .conf import settings
+try:
+    from django.utils.deprecation import MiddlewareMixin as MixinorObject
+except ImportError:
+    MixinorObject = object
 
 
-class ActiveSubscriptionMiddleware(object):
+class ActiveSubscriptionMiddleware(MixinorObject):
 
     def process_request(self, request):
         is_authenticated = request.user.is_authenticated
