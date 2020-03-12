@@ -259,7 +259,7 @@ class UserAccount(models.Model):
 @python_2_unicode_compatible
 class Customer(AccountRelatedStripeObject):
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through=UserAccount,
                                    related_name="customers",
                                    related_query_name="customers")

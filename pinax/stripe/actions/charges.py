@@ -76,7 +76,7 @@ def create(
     send_receipt=settings.PINAX_STRIPE_SEND_EMAIL_RECEIPTS, capture=True,
     email=None, destination_account=None, destination_amount=None,
     application_fee=None, on_behalf_of=None, idempotency_key=None,
-    stripe_account=None
+    stripe_account=None, metadata={}
 ):
     """
     Create a charge for the given customer or source.
@@ -121,6 +121,7 @@ def create(
         description=description,
         capture=capture,
         idempotency_key=idempotency_key,
+        metadata=metadata,
     )
     if destination_account:
         kwargs["destination"] = {"account": destination_account}
@@ -140,7 +141,13 @@ def create(
     )
     charge = sync_charge_from_stripe_data(stripe_charge)
     if send_receipt:
-        hooks.hookset.send_receipt(charge, email)
+        try:
+            hooks.hookset.send_receipt(charge, email)
+        except Exception:
+            # No way to pass error message back without changing interface, just fail
+            # silently. They can check the "receipt_sent" attr to see if it failed
+            pass
+    charge.refresh_from_db()
     return charge
 
 
