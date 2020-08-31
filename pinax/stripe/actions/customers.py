@@ -43,7 +43,8 @@ def _create_without_account(user, card=None, plan=settings.PINAX_STRIPE_DEFAULT_
         source=card,
         plan=plan,
         quantity=quantity,
-        trial_end=trial_end
+        trial_end=trial_end,
+        metadata={'user_id': user.id}
     )
     cus, created = models.Customer.objects.get_or_create(
         user=user,
@@ -78,6 +79,7 @@ def _create_with_account(user, stripe_account, card=None, plan=settings.PINAX_ST
         quantity=quantity,
         trial_end=trial_end,
         stripe_account=stripe_account.stripe_id,
+        metadata={'user_id': user.id}
     )
 
     if cus is None:
@@ -172,8 +174,11 @@ def link_customer(event):
         "customer.deleted"
     ]
     event_data_object = event.message["data"]["object"]
+    user_id = None
     if event.kind in customer_crud_events:
         cus_id = event_data_object["id"]
+        metadata = event_data_object["metadata"]
+        user_id = metadata["user_id"] if "user_id" in metadata else None
     else:
         cus_id = event_data_object.get("customer", None)
 
@@ -181,6 +186,9 @@ def link_customer(event):
         customer, created = models.Customer.objects.get_or_create(
             stripe_id=cus_id,
             stripe_account=event.stripe_account,
+            defaults={
+                "user_id": user_id
+            }
         )
         if event.kind in customer_crud_events:
             sync_customer(customer, event_data_object)
